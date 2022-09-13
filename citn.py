@@ -6,10 +6,15 @@ import time
 from os import system, name
 from yachalk import chalk
 import getpass
+import inspect
 
 def sigint_handler(signal, frame):
-	print("Programm beendet, takk")
-	sys.exit(0)
+	password = getpass.getpass()
+	if password=="Klinger":
+		print("Merci d'avoir joué")
+		sys.exit()
+	else:
+		print(chalk.red("Passwort falsch, schlimm\nBitte Enter drücken"))
 
 def clear():
 	# for windows
@@ -35,7 +40,7 @@ def main():
 	currWord = ""
 	lastInput = ""
 	while True:
-		eingabe = (input(chalk.blue("(add#[Wort], next, count, skip) ")))
+		eingabe = (input(chalk.blue("(add#[Wort], next, count, skip, help) ")))
 		eingabeTxt = eingabe
 		eingabe = eingabe.lower()
 		if eingabe == "/exit" or eingabe == "/beenden":
@@ -66,7 +71,7 @@ def main():
 			lastInput = eingabe
 			lenArr = len(words)
 			if lenArr == 0:
-				print(chalk.red("Mögest Du mehr Wörter einpflegen. Takk"))
+				print(chalk.red("Mögest Du mehr Wörter einpflegen. Takk. Beispiele: Kosmisch Latte, Dabendorf"))
 			else:
 				i = randrange(0, lenArr)
 				currWord = words[i]
@@ -84,6 +89,14 @@ def main():
 				delete_last_lines(2)
 				currWord = ""
 				lastInput = eingabe
+		elif eingabe=="help":
+			print(chalk.magenta(inspect.cleandoc("""Ist das ganze nicht selbsterklärend?
+			- add#[Wort]: Ein Wort hinzufügen, z.B. add#Dabendorf
+			- next: Das nächste Wort anzeigen
+			- count: Die Anzahl noch vorhandener Wörter anzeigen
+			- skip: Ein Wort überspringen, weil es das eigene Wort ist
+			- help: siehe help
+			""")))
 
 
 if __name__ == "__main__":
